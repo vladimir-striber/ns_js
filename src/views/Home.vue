@@ -2,7 +2,7 @@
   <v-container class="mainContainer">
     <h1 class="display-2">Post some question</h1>
     <form>
-      <input type="text" placeholder="Write some question" class="mainContainer__input" v-model="newQuestion" @keydown.enter.prevent="postQuestion">
+      <textarea placeholder="Write some question" class="mainContainer__textarea" v-model="newQuestion" @keydown.enter.prevent="postQuestion"></textarea>
       <p>{{ feedback }}</p>
       <v-btn @click="postQuestion">Post question</v-btn>
     </form>
@@ -62,10 +62,14 @@ export default {
     color: #333;
     margin-bottom: 25px;
   }
-  .mainContainer__input {
-    height: 200px;
+  .mainContainer__textarea {
+    height: 150px;
     width: 100%;
     font-size: 20px;
+    resize: none;
+    border: solid 1px #d4d4d4;
+    border-radius: 5px;
+    padding: 15px;
   }
   .comment {
     margin: 15px;
