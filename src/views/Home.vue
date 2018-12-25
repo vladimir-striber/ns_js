@@ -12,6 +12,7 @@
 
 <script>
 
+import db from "@/firebase/init"
 export default {
   name: "Home",
   data() {
@@ -33,7 +34,20 @@ export default {
         this.feedback = "Write some question..."
       }
     }
-  }   
+  },
+  created() {
+    // fetch data from firestore
+    db.collection("questions").get()
+    .then(snapshot => {
+      snapshot.docs.forEach(doc => {
+        // console.log(doc.data(), doc.id)
+        let quest = doc.data().content
+        console.log(quest)
+        // quest.id = doc.id
+        this.questionContent.unshift(quest)
+      })
+    })
+  }
 };
 </script>
 
