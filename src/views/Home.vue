@@ -40,9 +40,14 @@ export default {
       }
     },
     deleteQuestion(id) {
-      this.questionContent = this.questionContent.filter( question => {
-        return question.id != id    
-      } )
+      // delete data from firestore
+      db.collection("questions").doc(id).delete()
+      .then(() => {
+        this.questionContent = this.questionContent.filter( question => {
+          return question.id != id    
+        })
+      })
+      
     }
   },
   created() {
