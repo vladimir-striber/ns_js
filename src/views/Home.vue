@@ -7,7 +7,7 @@
       <v-btn @click="postQuestion">Post question</v-btn>
     </form>
     <div class="comment" v-for="question in questionContent" :key="question.id">
-      <p>{{ question }}</p>
+      <p>{{ question.content }}</p>
       <i class="material-icons delete" @click="deleteQuestion(question.id)">delete</i>
     </div>
     
@@ -40,10 +40,9 @@ export default {
       }
     },
     deleteQuestion(id) {
-      // this.questionContent = this.questionContent.filter( question => {
-      //   // return question.id != id       
-      // } )
-       console.log(id)
+      this.questionContent = this.questionContent.filter( question => {
+        return question.id != id    
+      } )
     }
   },
   created() {
@@ -51,11 +50,9 @@ export default {
     db.collection("questions").get()
     .then(snapshot => {
       snapshot.docs.forEach(doc => {
-        let quest = doc.data().content
-        // let quest = doc.data()
-        // quest.id = doc.id
-        this.questionContent.push(quest)
-        // console.log(quest)
+        let question = doc.data()
+        question.id = doc.id
+        this.questionContent.push(question)
       })
     })
   }
