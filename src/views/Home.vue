@@ -6,7 +6,11 @@
       <p>{{ feedback }}</p>
       <v-btn @click="postQuestion">Post question</v-btn>
     </form>
-    <p class="comment" v-for="(question, index) in questionContent" :key="index">{{ question }}</p>
+    <div class="comment" v-for="question in questionContent" :key="question.id">
+      <p>{{ question }}</p>
+      <i class="material-icons delete" @click="deleteQuestion(question.id)">delete</i>
+    </div>
+    
   </v-container>
 </template>
 
@@ -24,15 +28,22 @@ export default {
   },
   methods: {
     postQuestion() {
-      // console.log(this.question)
       if(this.newQuestion) {
         this.questionContent.unshift(this.newQuestion)
+        db.collection("questions").add({
+          content: this.newQuestion
+        })
         this.newQuestion = null
         this.feedback = null
-        // console.log(this.questionContent)
       } else {
         this.feedback = "Write some question..."
       }
+    },
+    deleteQuestion(id) {
+      // this.questionContent = this.questionContent.filter( question => {
+      //   // return question.id != id       
+      // } )
+       console.log(id)
     }
   },
   created() {
@@ -40,11 +51,11 @@ export default {
     db.collection("questions").get()
     .then(snapshot => {
       snapshot.docs.forEach(doc => {
-        // console.log(doc.data(), doc.id)
         let quest = doc.data().content
-        console.log(quest)
+        // let quest = doc.data()
         // quest.id = doc.id
-        this.questionContent.unshift(quest)
+        this.questionContent.push(quest)
+        // console.log(quest)
       })
     })
   }
@@ -55,7 +66,6 @@ export default {
   .mainContainer {
     form {
       margin-bottom: 25px;
-      // height: 200px;
     }
   }
   h1 {
@@ -70,13 +80,24 @@ export default {
     border: solid 1px #d4d4d4;
     border-radius: 5px;
     padding: 15px;
+    margin-bottom: 15px;
   }
   .comment {
-    margin: 15px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
     padding: 15px;
-    background: #d4d4d4;
-    border: solid 1px #d4d4d4;
+    background: #eaeaea;
+    border: solid 1px #eaeaea;
     border-radius: 5px;
+    p {
+      margin: 0;
+    }
+    i {
+      color: #aaa;
+      cursor: pointer;
+    }
+    
   }
 </style>
 
