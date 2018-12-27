@@ -31,12 +31,13 @@ export default {
       let questionObject = {}
       if(this.newQuestion) {
         questionObject.content = this.newQuestion
-        questionObject.id = this.questionContent.id
+        // console.log(questionObject)
         this.questionContent.unshift(questionObject)
-        console.log(this.questionContent)
+        // adding data to firestore
         db.collection("questions").add({
           content: this.newQuestion
         })
+        
         this.newQuestion = null
         this.feedback = null        
       } else {
@@ -44,7 +45,8 @@ export default {
       }      
     },
     deleteQuestion(id) {
-      // delete data from firestore
+      console.log(id)
+      // deleting data from firestore
       db.collection("questions").doc(id).delete()
       .then(() => {
         this.questionContent = this.questionContent.filter( question => {
@@ -54,15 +56,18 @@ export default {
     }
   },
   created() {
-    // fetch data from firestore
+    // fetching data from firestore
     db.collection("questions").get()
     .then(snapshot => {
       snapshot.forEach(doc => {
         let question = doc.data()
         question.id = doc.id
-        // console.log(question.id)
-        this.questionContent.push(question) 
-        console.log(this.questionContent)
+        // let fireObject = {
+        //   content: doc.data().content,
+        //   id: doc.id
+        // }      
+        // this.questionContent.push(fireObject) 
+        this.questionContent.push(question)
       })
     })
   }
