@@ -28,16 +28,20 @@ export default {
   },
   methods: {
     postQuestion() {
+      let questionObject = {}
       if(this.newQuestion) {
-        this.questionContent.unshift(this.newQuestion)
+        questionObject.content = this.newQuestion
+        questionObject.id = this.questionContent.id
+        this.questionContent.unshift(questionObject)
+        console.log(this.questionContent)
         db.collection("questions").add({
           content: this.newQuestion
         })
         this.newQuestion = null
-        this.feedback = null
+        this.feedback = null        
       } else {
         this.feedback = "Write some question..."
-      }
+      }      
     },
     deleteQuestion(id) {
       // delete data from firestore
@@ -46,18 +50,19 @@ export default {
         this.questionContent = this.questionContent.filter( question => {
           return question.id != id    
         })
-      })
-      
+      })      
     }
   },
   created() {
     // fetch data from firestore
     db.collection("questions").get()
     .then(snapshot => {
-      snapshot.docs.forEach(doc => {
+      snapshot.forEach(doc => {
         let question = doc.data()
         question.id = doc.id
-        this.questionContent.push(question)
+        // console.log(question.id)
+        this.questionContent.push(question) 
+        console.log(this.questionContent)
       })
     })
   }
