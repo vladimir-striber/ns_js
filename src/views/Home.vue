@@ -31,13 +31,12 @@ export default {
       let questionObject = {}
       if(this.newQuestion) {
         questionObject.content = this.newQuestion
-        // console.log(questionObject)
         this.questionContent.unshift(questionObject)
         // adding data to firestore
         db.collection("questions").add({
           content: this.newQuestion
         })
-        
+        console.log(questionContent)
         this.newQuestion = null
         this.feedback = null        
       } else {
@@ -45,7 +44,7 @@ export default {
       }      
     },
     deleteQuestion(id) {
-      console.log(id)
+      // console.log(id)
       // deleting data from firestore
       db.collection("questions").doc(id).delete()
       .then(() => {
@@ -60,16 +59,26 @@ export default {
     db.collection("questions").get()
     .then(snapshot => {
       snapshot.forEach(doc => {
-        let question = doc.data()
-        question.id = doc.id
-        // let fireObject = {
-        //   content: doc.data().content,
-        //   id: doc.id
-        // }      
-        // this.questionContent.push(fireObject) 
-        this.questionContent.push(question)
+        let quest = doc.data()
+        quest.id = doc.id
+        console.log(quest)
+        this.questionContent.push(quest)
       })
     })
+
+    // realtime changes
+    // db.collection("questions").onSnapshot( snapshot => {
+    //   let changes = snapshot.docChanges()
+    //   changes.forEach(change => {
+    //     if(change.type == "added") {
+    //       this.questionContent.push(change.doc.data())
+    //     } 
+    //     // else if(change.type == "removed"){
+    //     //   let delQuest = deleteQuestion(id)
+    //     // }
+    //   })
+      
+    // })
   }
 };
 </script>
