@@ -31,12 +31,12 @@ export default {
       let questionObject = {}
       if(this.newQuestion) {
         questionObject.content = this.newQuestion
-        this.questionContent.unshift(questionObject)
+        this.questionContent.push(questionObject)
         // adding data to firestore
         db.collection("questions").add({
           content: this.newQuestion
         })
-        console.log(questionContent)
+        // console.log(questionContent)
         this.newQuestion = null
         this.feedback = null        
       } else {
@@ -44,7 +44,6 @@ export default {
       }      
     },
     deleteQuestion(id) {
-      // console.log(id)
       // deleting data from firestore
       db.collection("questions").doc(id).delete()
       .then(() => {
